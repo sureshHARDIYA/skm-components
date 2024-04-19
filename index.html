@@ -5,12 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Lit + TS</title>
-    <link rel="stylesheet" href="./src/index.css" />
-    <script type="module" src="/src/my-element.ts"></script>
+    <script type="module" src="/src/index.ts"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/components/drawer/drawer.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/themes/light.css" />
   </head>
   <body>
-    <my-element>
-      <h1>Vite + Lit</h1>
-    </my-element>
+    <skm-quiz name="Quiz Name" slug="/how-to-program-testing-final"></skm-quiz>
+    <sl-drawer label="Drawer" class="drawer-overview">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      <sl-button slot="footer" variant="primary">Close</sl-button>
+    </sl-drawer>
+    
   </body>
 </html>
