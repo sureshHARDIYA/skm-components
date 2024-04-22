@@ -13,7 +13,7 @@ export default class SKMCarousel extends LitElement {
   changeSlide = (next = true) => {
     const dots = this.shadowRoot?.querySelectorAll('.dots > .dot');
     const slides = this.shadowRoot?.querySelector('.slides');
-    const slidesItem = this.shadowRoot?.querySelectorAll('.slides');
+    const slidesCount = this.shadowRoot?.querySelectorAll('.slides >.slide');
 
     console.log('slide count', slides?.childElementCount);
     console.log('current', this.current);
@@ -27,8 +27,12 @@ export default class SKMCarousel extends LitElement {
     for (let i = 0; i < (slides?.childElementCount ?? 3); i++) {
       if (i !== this.current) {
         dots?.[i].classList.remove('active');
+        slidesCount?.[i]?.classList.remove('block');
+        slidesCount?.[i]?.classList.add('disappear');
       } else {
         dots?.[i].classList.add('active');
+        slidesCount?.[i]?.classList.remove('disappear');
+        slidesCount?.[i]?.classList.add('block');
       }
     }
   };

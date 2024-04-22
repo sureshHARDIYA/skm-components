@@ -60,7 +60,7 @@ export default css`
       width: 100%;
       transition: 1s ease-in-out all;
 
-      .slide {
+      > .slide {
         min-width: 100%;
         min-height: 250px;
         height: auto;
@@ -87,7 +87,7 @@ export default css`
     display: block;
   }
 
-  disapppear: {
-    display: nones;
+  .disappear {
+    display: none;
   }
 `;
