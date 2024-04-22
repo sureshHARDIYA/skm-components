@@ -1,3 +1,4 @@
 import SKMquiz from './components/quiz';
+import SKMCarousel from './components/carousel';
 
-export { SKMquiz };
+export { SKMCarousel, SKMquiz };
