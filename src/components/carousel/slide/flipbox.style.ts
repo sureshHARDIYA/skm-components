@@ -2,8 +2,8 @@ import { css } from 'lit';
 
 export default css`
   .flip-box {
+    width: 100%;
     background-color: transparent;
-    width: 300px;
     height: 200px;
     border: 1px solid #f1f1f1;
     perspective: 1000px;
@@ -18,7 +18,7 @@ export default css`
     transform-style: preserve-3d;
   }
 
-  .flip-box:hover .flip-box-inner {
+  .flip-box:active .flip-box-inner {
     transform: rotateY(180deg);
   }
 

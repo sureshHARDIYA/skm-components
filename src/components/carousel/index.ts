@@ -41,8 +41,6 @@ export default class SKMCarousel extends LitElement {
   };
 
   firstUpdated() {
-    console.log('firstUpdated', this.children);
-
     // Controls
     this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
       this.changeSlide();
@@ -52,18 +50,20 @@ export default class SKMCarousel extends LitElement {
       this.changeSlide(false);
     });
 
-    this.slideData?.map((e, index) => {
+    Array.from({ length: this.children.length }, (_, index) =>
       this.shadowRoot
         ?.getElementById(`slide_${index}`)
-        ?.addEventListener('click', () => this.checkActive(index));
-    });
+        ?.addEventListener('click', () => this.checkActive(index))
+    );
   }
 
   render() {
     return html`<div class="container">
       <div class="carousel">
         <div class="slides">
-          <slot></slot>
+          <slot name="slide-one" id="slide-one" class="slide block"></slot>
+          <slot name="slide-two" id="slide-two" class="slide disappear"></slot>
+          <slot name="slide-three" id="slide-three" class="slide disappear"></slot>
         </div>
         <div class="controls">
           <div class="control prev-slide">&#9668;</div>

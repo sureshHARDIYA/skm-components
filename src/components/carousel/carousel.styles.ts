@@ -59,6 +59,7 @@ export default css`
       }
   
       .slides {
+
         position: relative;
         top: 50%;
         left: 0;
@@ -70,6 +71,8 @@ export default css`
           min-width: 100%;
           animation: fadeIn 2s;
           position: relative;
+          align-items: center;
+          justify-content: center;
         }
   
         .text {
@@ -114,7 +117,6 @@ export default css`
     }
   }
 
-  
 
   .block {
     display: block;

@@ -8,8 +8,15 @@ import componentStyles from '../../../styles/component.styles';
 export default class SKMFlipSlide extends LitElement {
   static readonly styles = [componentStyles, carouselStyle];
 
-  @property({ type: String }) frontSlide = 'frontSlide';
-  @property({ type: String }) backSlide = 'backSlide';
+  firstUpdated() {
+    this.shadowRoot?.querySelector('.flip-box')?.addEventListener('click', () => {
+      const slides = this.shadowRoot?.querySelector('.flip-box-inner');
+
+      console.log('slide ', slides);
+
+      slides?.classList?.add('rotate');
+    });
+  }
 
   render() {
     return html`<div class="flip-box slide">
