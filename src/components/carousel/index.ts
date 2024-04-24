@@ -1,13 +1,8 @@
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import componentStyles from '../../styles/component.styles';
-
 import carouselStyle from './carousel.styles';
-
-type SlideProps = {
-  title: string;
-  url: string;
-};
+import { SlideProps } from '../../type/type';
 
 @customElement('skm-carousel')
 export default class SKMCarousel extends LitElement {
@@ -15,6 +10,7 @@ export default class SKMCarousel extends LitElement {
 
   current = 0;
 
+  @property()
   slideData: Array<SlideProps> = [
     {
       url: 'https://picsum.photos/1280/720?random=1',
@@ -59,6 +55,8 @@ export default class SKMCarousel extends LitElement {
   };
 
   firstUpdated() {
+    console.log('firstUpdated', this.children);
+
     // Controls
     this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
       this.changeSlide();
@@ -79,17 +77,9 @@ export default class SKMCarousel extends LitElement {
     return html`<div class="container">
       <div class="carousel">
         <div class="slides">
-          ${this.slideData.map(
-            (slide) =>
-              html` <div class="slide">
-                <img
-                  src="${slide.url}"
-                  alt="slide image"
-                  class="slide"
-                  style="width: 100vw; height: 250px ; object-fit:cover" />
-                <div class="text">${slide.title}</div>
-                <div></div>
-              </div>`
+          ${Array.from(
+            { length: this.children.length },
+            (_, index) => html` <div class="slide">${this.children[index]}</div>`
           )}
         </div>
         <div class="controls">
@@ -99,7 +89,10 @@ export default class SKMCarousel extends LitElement {
       </div>
 
       <div class="dots">
-        ${this.slideData.map((dots, index) => html`<div class="dot" id="slide_${index}"></div>`)}
+        ${Array.from(
+          { length: this.children.length },
+          (_, index) => html`<div class="dot" id="slide_${index}"></div>`
+        )}
       </div>
     </div>`;
   }
