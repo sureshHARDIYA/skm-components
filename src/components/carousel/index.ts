@@ -1,12 +1,14 @@
 import { html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import componentStyles from '../../styles/component.styles';
-import carouselStyle from './carousel.styles';
-import { SlideProps } from '../../type/type';
+import { customElement } from 'lit/decorators.js';
 
-@customElement('skm-carousel')
+import carouselStyle from './carousel.styles';
+import componentStyles from '../../styles/component.styles';
+
+@customElement('skm-flip-carousel')
 export default class SKMCarousel extends LitElement {
   static readonly styles = [componentStyles, carouselStyle];
+
+  slideData: any;
 
   current = 0;
 
@@ -50,7 +52,7 @@ export default class SKMCarousel extends LitElement {
       this.changeSlide(false);
     });
 
-    this.slideData.map((e, index) => {
+    this.slideData?.map((e, index) => {
       this.shadowRoot
         ?.getElementById(`slide_${index}`)
         ?.addEventListener('click', () => this.checkActive(index));
@@ -61,10 +63,7 @@ export default class SKMCarousel extends LitElement {
     return html`<div class="container">
       <div class="carousel">
         <div class="slides">
-          ${Array.from(
-            { length: this.children.length },
-            (_, index) => html` <div class="slide">${this.children[index]}</div>`
-          )}
+          <slot></slot>
         </div>
         <div class="controls">
           <div class="control prev-slide">&#9668;</div>
@@ -84,6 +83,6 @@ export default class SKMCarousel extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'skm-carousel': SKMCarousel;
+    'skm-flip-carousel': SKMCarousel;
   }
 }

@@ -1,17 +1,18 @@
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import componentStyles from '../../styles/component.styles';
+
 import carouselStyle from './flipbox.style';
+import componentStyles from '../../../styles/component.styles';
 
 @customElement('skm-flip-slide')
-export default class SKMFlipBox extends LitElement {
+export default class SKMFlipSlide extends LitElement {
   static readonly styles = [componentStyles, carouselStyle];
 
   @property({ type: String }) frontSlide = 'frontSlide';
   @property({ type: String }) backSlide = 'backSlide';
 
   render() {
-    return html`<div class="flip-box">
+    return html`<div class="flip-box slide">
       <div class="flip-box-inner">
         <div class="flip-box-front">
           <h2>${this.frontSlide}</h2>
@@ -26,6 +27,6 @@ export default class SKMFlipBox extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'skm-flip-slide': SKMFlipBox;
+    'skm-flip-slide': SKMFlipSlide;
   }
 }
