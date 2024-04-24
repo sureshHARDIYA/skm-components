@@ -10,22 +10,6 @@ export default class SKMCarousel extends LitElement {
 
   current = 0;
 
-  @property()
-  slideData: Array<SlideProps> = [
-    {
-      url: 'https://picsum.photos/1280/720?random=1',
-      title: 'SLide 1'
-    },
-    {
-      url: 'https://picsum.photos/1280/720?random=2',
-      title: 'SLide 2'
-    },
-    {
-      url: 'https://picsum.photos/1280/720?random=3',
-      title: 'SLide 3'
-    }
-  ];
-
   checkActive = (currentSlide: number) => {
     const dots = this.shadowRoot?.querySelectorAll('.dots > .dot');
     const slides = this.shadowRoot?.querySelector('.slides');
