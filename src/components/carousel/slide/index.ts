@@ -15,10 +15,10 @@ export default class SKMFlipSlide extends LitElement {
     return html`<div class="flip-box slide">
       <div class="flip-box-inner">
         <div class="flip-box-front">
-          <h2>${this.frontSlide}</h2>
+          <slot name="slide-front"></slot>
         </div>
         <div class="flip-box-back">
-          <h2>${this.backSlide}</h2>
+          <slot name="slide-back"></slot>
         </div>
       </div>
     </div>`;
