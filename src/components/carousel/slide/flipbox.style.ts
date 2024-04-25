@@ -38,6 +38,7 @@ export default css`
 
   .flip-box-front,
   .flip-box-back {
+    color: #000;
     position: absolute;
     width: 100%;
     align-items: center;
@@ -49,6 +50,7 @@ export default css`
   }
 
   .flip-box-front {
+    color: #000;
     background-color: #bbb;
     color: black;
     align-items: center;
@@ -57,9 +59,8 @@ export default css`
   }
 
   .flip-box-back {
-    background-color: dodgerblue;
-    color: white;
-    transform: rotateY(180deg);
+    background-color: green;
+    transform: rotateX(180deg);
     text-align: center;
     align-item: center;
   }

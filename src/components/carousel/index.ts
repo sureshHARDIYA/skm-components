@@ -40,16 +40,16 @@ export default class SKMCarousel extends LitElement {
   firstUpdated() {
     this.checkActive(0);
     if (this.children.length)
-      setInterval(() => {
-        this.current =
-          this.current < this.children.length - 1 ? this.current + 1 : (this.current = 0);
+      // setInterval(() => {
+      //   this.current =
+      //     this.current < this.children.length - 1 ? this.current + 1 : (this.current = 0);
 
-        this.checkActive(this.current);
-      }, 5000);
+      //   this.checkActive(this.current);
+      // }, 5000);
 
-    this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
-      this.changeSlide();
-    });
+      this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
+        this.changeSlide();
+      });
     this.shadowRoot?.querySelector('.prev-slide')?.addEventListener('click', () => {
       this.changeSlide(false);
     });

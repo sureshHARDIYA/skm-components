@@ -67,6 +67,8 @@ export default css`
         justify-content: center;
         animation:  fadeIn 2s;
 
+       
+
         > ::slotted(skm-flip-slide) {
           cursor: pointer;
           width: 100%;
