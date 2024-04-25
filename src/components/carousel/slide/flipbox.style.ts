@@ -10,6 +10,13 @@ export default css`
     }
   }
 
+  *::slotted(div) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
   .flip-box {
     width: 100%;
     background-color: transparent;

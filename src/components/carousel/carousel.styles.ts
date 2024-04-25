@@ -20,7 +20,6 @@ export default css`
     .carousel {
       position: relative;
       width: 100vw;
-      height: 250px;
       border-radius: 3px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   
@@ -59,16 +58,11 @@ export default css`
   
       .slides {
         position: relative;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
         display: flex;
         align-items: center;
         justify-content: center;
         animation:  fadeIn 2s;
-
        
-
         > ::slotted(skm-flip-slide) {
           cursor: pointer;
           width: 100%;
