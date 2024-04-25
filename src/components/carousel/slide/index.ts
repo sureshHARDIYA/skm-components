@@ -12,8 +12,6 @@ export default class SKMFlipSlide extends LitElement {
 
   firstUpdated() {
     this.shadowRoot?.querySelector('.flip-box')?.addEventListener('click', () => {
-      console.log('click', this.clickFront);
-
       const slides = this.shadowRoot?.querySelector('.flip-box-inner');
 
       if (this.clickFront) {

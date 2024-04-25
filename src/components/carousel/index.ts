@@ -8,21 +8,17 @@ import componentStyles from '../../styles/component.styles';
 export default class SKMCarousel extends LitElement {
   static readonly styles = [componentStyles, carouselStyle];
 
-  slideData: any;
-
-  current = 0;
+  current: number = 0;
 
   checkActive = (currentSlide: number = 0) => {
-    console.log('currentSlide', currentSlide);
-
+    this.current = currentSlide;
     const dots = this.shadowRoot?.querySelectorAll('.dots > .dot');
-    const slides = this.shadowRoot?.querySelector('skm-flip-slide');
 
     this.querySelectorAll('skm-flip-slide').forEach((slide, index) => {
-      slide.setAttribute('selected', index === currentSlide);
+      slide.setAttribute('selected', index === currentSlide ? 'true' : 'false');
     });
 
-    for (let i = 0; i < (slides?.childElementCount ?? 3); i++) {
+    for (let i = 0; i < this.children.length; i++) {
       if (i === currentSlide) {
         dots?.[currentSlide].classList.add('active');
       } else {
@@ -35,15 +31,22 @@ export default class SKMCarousel extends LitElement {
     if (next) {
       this.current = this.current > 1 ? 0 : this.current + 1;
     } else {
-      this.current = this.current < 0 ? 0 : this.current - 1;
+      this.current = this.current === 0 ? this.children.length - 1 : this.current - 1;
     }
 
     this.checkActive(this.current);
   };
 
   firstUpdated() {
-    // this.checkActive();
-    // Controls
+    this.checkActive(0);
+    if (this.children.length)
+      setInterval(() => {
+        this.current =
+          this.current < this.children.length - 1 ? this.current + 1 : (this.current = 0);
+
+        this.checkActive(this.current);
+      }, 5000);
+
     this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
       this.changeSlide();
     });
@@ -65,8 +68,8 @@ export default class SKMCarousel extends LitElement {
           <slot></slot>
         </div>
         <div class="controls">
-          <div class="control prev-slide">&#9668;</div>
-          <div class="control next-slide">&#9658;</div>
+          <img src="./backButton.svg" class="control prev-slide" />
+          <img src="./nextButton.svg" class="control next-slide" />
         </div>
       </div>
 

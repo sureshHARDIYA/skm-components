@@ -3,10 +3,9 @@ import { css } from 'lit';
 export default css`
 
   @keyframes fadeIn {
-    0% { opacity: 0.5; }
+    0% { opacity: 0.2; }
     100% { opacity: 1; }
   }
-
 
   .body {
     background: #3e3e3e;
@@ -33,14 +32,14 @@ export default css`
         opacity: 0;
         display: flex;
         position: absolute;
-        top: 50%;
+        top: 45%;
         left: 0;
         justify-content: space-between;
         width: 100%;
         transition: all ease 0.5s;
   
         .control {
-          margin: 0 5px;
+          margin: 0 20px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -64,14 +63,18 @@ export default css`
         left: 0;
         transform: translateY(-50%);
         display: flex;
-        width: 100%;
-  
-        ::slotted(skm-flip-slide) {
-          min-width: 100%;
+        align-items: center;
+        justify-content: center;
+        animation:  fadeIn 2s;
+
+        > ::slotted(skm-flip-slide) {
+          cursor: pointer;
+          width: 100%;
           position: relative;
           align-items: center;
           justify-content: center;
-          animation: fadeIn 2s;
+          display: none;
+          animation:  fadeIn 2s;
         }
 
         ::slotted(skm-flip-slide[selected="true"]) {
@@ -80,17 +83,6 @@ export default css`
 
         ::slotted(skm-flip-slide[selected="false"]) {
           display: none;
-        }
-  
-        .text {
-          color: red;
-          z-index: 1000;
-          font-size: 15px;
-          padding: 8px 12px;
-          position: absolute;
-          bottom: 0px;
-          width: 100%;
-          text-align: center;
         }
       }
     }
@@ -123,5 +115,4 @@ export default css`
       }
     }
   }
-
 `;
