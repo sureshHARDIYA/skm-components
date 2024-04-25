@@ -18,8 +18,12 @@ export default css`
     transform-style: preserve-3d;
   }
 
-  .flip-box:active .flip-box-inner {
+  .rotation {
     transform: rotateY(180deg);
+  }
+
+  .rotationBack {
+    transform: rotateY(0deg);
   }
 
   .flip-box-front,

@@ -12,20 +12,21 @@ export default class SKMCarousel extends LitElement {
 
   current = 0;
 
-  checkActive = (currentSlide: number) => {
+  checkActive = (currentSlide: number = 0) => {
+    console.log('currentSlide', currentSlide);
+
     const dots = this.shadowRoot?.querySelectorAll('.dots > .dot');
-    const slides = this.shadowRoot?.querySelector('.slides');
-    const slidesCount = this.shadowRoot?.querySelectorAll('.slides >.slide');
+    const slides = this.shadowRoot?.querySelector('skm-flip-slide');
+
+    this.querySelectorAll('skm-flip-slide').forEach((slide, index) => {
+      slide.setAttribute('selected', index === currentSlide);
+    });
 
     for (let i = 0; i < (slides?.childElementCount ?? 3); i++) {
-      if (i !== currentSlide) {
-        dots?.[i].classList.remove('active');
-        slidesCount?.[i]?.classList.remove('block');
-        slidesCount?.[i]?.classList.add('disappear');
+      if (i === currentSlide) {
+        dots?.[currentSlide].classList.add('active');
       } else {
-        dots?.[i].classList.add('active');
-        slidesCount?.[i]?.classList.remove('disappear');
-        slidesCount?.[i]?.classList.add('block');
+        dots?.[i].classList.remove('active');
       }
     }
   };
@@ -41,11 +42,11 @@ export default class SKMCarousel extends LitElement {
   };
 
   firstUpdated() {
+    // this.checkActive();
     // Controls
     this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
       this.changeSlide();
     });
-
     this.shadowRoot?.querySelector('.prev-slide')?.addEventListener('click', () => {
       this.changeSlide(false);
     });
@@ -61,9 +62,7 @@ export default class SKMCarousel extends LitElement {
     return html`<div class="container">
       <div class="carousel">
         <div class="slides">
-          <slot name="slide-one" id="slide-one" class="slide block"></slot>
-          <slot name="slide-two" id="slide-two" class="slide disappear"></slot>
-          <slot name="slide-three" id="slide-three" class="slide disappear"></slot>
+          <slot></slot>
         </div>
         <div class="controls">
           <div class="control prev-slide">&#9668;</div>

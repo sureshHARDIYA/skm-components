@@ -8,13 +8,22 @@ import componentStyles from '../../../styles/component.styles';
 export default class SKMFlipSlide extends LitElement {
   static readonly styles = [componentStyles, carouselStyle];
 
+  clickFront = true;
+
   firstUpdated() {
     this.shadowRoot?.querySelector('.flip-box')?.addEventListener('click', () => {
+      console.log('click', this.clickFront);
+
       const slides = this.shadowRoot?.querySelector('.flip-box-inner');
 
-      console.log('slide ', slides);
-
-      slides?.classList?.add('rotate');
+      if (this.clickFront) {
+        slides?.classList?.add('rotation');
+        slides?.classList?.remove('rotationBack');
+      } else {
+        slides?.classList?.remove('rotation');
+        slides?.classList?.add('rotationBack');
+      }
+      this.clickFront = !this.clickFront;
     });
   }
 

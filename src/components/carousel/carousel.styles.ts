@@ -59,7 +59,6 @@ export default css`
       }
   
       .slides {
-
         position: relative;
         top: 50%;
         left: 0;
@@ -67,12 +66,20 @@ export default css`
         display: flex;
         width: 100%;
   
-        > .slide {
+        ::slotted(skm-flip-slide) {
           min-width: 100%;
-          animation: fadeIn 2s;
           position: relative;
           align-items: center;
           justify-content: center;
+          animation: fadeIn 2s;
+        }
+
+        ::slotted(skm-flip-slide[selected="true"]) {
+          display: block; 
+        }
+
+        ::slotted(skm-flip-slide[selected="false"]) {
+          display: none;
         }
   
         .text {
@@ -115,15 +122,6 @@ export default css`
         }
       }
     }
-  }
-
-
-  .block {
-    display: block;
-  }
-
-  .disappear {
-    display: none;
   }
 
 `;
