@@ -1,3 +1,5 @@
 import SKMquiz from './components/quiz';
+import SKMCarousel from './components/carousel';
+import flip from './components/carousel/slide';
 
-export { SKMquiz };
+export { SKMCarousel, SKMquiz, flip };
