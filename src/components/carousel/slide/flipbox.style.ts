@@ -17,6 +17,10 @@ export default css`
     height: 100%;
   }
 
+  .fullheight {
+    height: 100%;
+  }
+
   .flip-box {
     width: 100%;
     background-color: transparent;
@@ -66,7 +70,6 @@ export default css`
   }
 
   .flip-box-back {
-    background-color: green;
     transform: rotateX(180deg);
     text-align: center;
     align-item: center;

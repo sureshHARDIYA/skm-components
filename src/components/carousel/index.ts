@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 import carouselStyle from './carousel.styles';
 import componentStyles from '../../styles/component.styles';
@@ -8,10 +8,11 @@ import componentStyles from '../../styles/component.styles';
 export default class SKMCarousel extends LitElement {
   static readonly styles = [componentStyles, carouselStyle];
 
-  current: number = 0;
+  @property({ type: Number })
+  currentSlide: number = 1;
 
   checkActive = (currentSlide: number = 0) => {
-    this.current = currentSlide;
+    this.currentSlide = currentSlide;
     const dots = this.shadowRoot?.querySelectorAll('.dots > .dot');
 
     this.querySelectorAll('skm-flip-slide').forEach((slide, index) => {
@@ -29,27 +30,31 @@ export default class SKMCarousel extends LitElement {
 
   changeSlide = (next = true) => {
     if (next) {
-      this.current = this.current > 1 ? 0 : this.current + 1;
+      this.currentSlide = this.currentSlide > 1 ? 0 : this.currentSlide + 1;
     } else {
-      this.current = this.current === 0 ? this.children.length - 1 : this.current - 1;
+      this.currentSlide =
+        this.currentSlide === 0 ? this.children.length - 1 : this.currentSlide - 1;
     }
 
-    this.checkActive(this.current);
+    this.checkActive(this.currentSlide);
   };
 
   firstUpdated() {
-    this.checkActive(0);
+    this.checkActive(this.currentSlide);
+
     if (this.children.length)
-      // setInterval(() => {
-      //   this.current =
-      //     this.current < this.children.length - 1 ? this.current + 1 : (this.current = 0);
+      setInterval(() => {
+        this.currentSlide =
+          this.currentSlide < this.children.length - 1
+            ? this.currentSlide + 1
+            : (this.currentSlide = 0);
 
-      //   this.checkActive(this.current);
-      // }, 5000);
+        this.checkActive(this.currentSlide);
+      }, 5000);
 
-      this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
-        this.changeSlide();
-      });
+    this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
+      this.changeSlide();
+    });
     this.shadowRoot?.querySelector('.prev-slide')?.addEventListener('click', () => {
       this.changeSlide(false);
     });
