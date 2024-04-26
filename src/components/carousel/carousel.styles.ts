@@ -17,8 +17,6 @@ export default css`
       position: relative;
       width: 100%;
       border-radius: 3px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-  
       &:hover .controls {
         opacity: 1;
       }

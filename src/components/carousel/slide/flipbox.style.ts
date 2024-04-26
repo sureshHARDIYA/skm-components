@@ -25,7 +25,6 @@ export default css`
     width: 100%;
     background-color: transparent;
     height: 300px;
-    border: 1px solid #f1f1f1;
     perspective: 1000px;
     animation: fadeIn 1s;
   }
@@ -59,6 +58,7 @@ export default css`
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     padding: 5rem;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   }
 
   .flip-box-front {

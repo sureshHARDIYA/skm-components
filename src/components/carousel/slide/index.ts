@@ -7,7 +7,10 @@ import componentStyles from '../../../styles/component.styles';
 @customElement('skm-flip-slide')
 export default class SKMFlipSlide extends LitElement {
   static readonly styles = [componentStyles, carouselStyle];
-  static shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
+  public static readonly shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true
+  };
 
   clickFront = true;
 
@@ -18,7 +21,6 @@ export default class SKMFlipSlide extends LitElement {
       const el = e.assignedElements({ flatten: true });
 
       // check in case use pass children in slot
-
       if (el && el?.[0]?.childNodes?.[1]) {
         (el?.[0].childNodes[1] as HTMLElement).style.display = 'flex';
         (el?.[0].childNodes[1] as HTMLElement).style.height = '100%';
