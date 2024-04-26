@@ -24,10 +24,10 @@ export default css`
   .flip-box {
     width: 100%;
     background-color: transparent;
-    height: 200px;
+    height: 300px;
     border: 1px solid #f1f1f1;
     perspective: 1000px;
-    animation: fadeIn 2s;
+    animation: fadeIn 1s;
   }
 
   .flip-box-inner {
@@ -58,11 +58,12 @@ export default css`
     height: 100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    padding: 5rem;
   }
 
   .flip-box-front {
     color: #000;
-    background-color: #bbb;
+    background-color: #eaecee;
     color: black;
     align-items: center;
     display: flex;
@@ -73,5 +74,6 @@ export default css`
     transform: rotateX(180deg);
     text-align: center;
     align-item: center;
+    background-color: #f5f6f7;
   }
 `;

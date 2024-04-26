@@ -6,20 +6,16 @@ export default css`
     0% { opacity: 0.2; }
     100% { opacity: 1; }
   }
-
-  .body {
-    background: #3e3e3e;
-  }
-
   .container{
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 
     .carousel {
       position: relative;
-      width: 100vw;
+      width: 100%;
       border-radius: 3px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   
@@ -86,8 +82,7 @@ export default css`
     .dots {
       display: flex;
       justify-content: center;
-      position: absolute;
-      bottom: -20px;
+      margin-top: 10px;
   
       > .dot {
         cursor: pointer;

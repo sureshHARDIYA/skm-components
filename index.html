@@ -5,13 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Lit + TS</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/themes/light.css" />
     <script type="module" src="/src/index.ts"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/components/drawer/drawer.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2rem;
+      }
+    </style>
   </head>
   <body>
-
-    <div style="margin-top: 50px;"></div>
     <skm-flip-carousel currentSlide="2">
       <skm-flip-slide>
         <div slot="slide-front">
@@ -39,10 +42,11 @@
         <div slot="slide-front">
           Flip me 3
         </div>
-       
+        <div slot="slide-back">
+          <div style="font-size: 20px;">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          </div>
       </skm-flip-slide>
     </skm-flip-carousel>
   </body>
- 
-  
 </html>

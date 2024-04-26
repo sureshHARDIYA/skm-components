@@ -1,10 +1,5 @@
 import { html, LitElement } from 'lit';
-import {
-  customElement,
-  property,
-  queryAssignedElements,
-  queryAssignedNodes
-} from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
 import carouselStyle from './flipbox.style';
 import componentStyles from '../../../styles/component.styles';
@@ -27,9 +22,9 @@ export default class SKMFlipSlide extends LitElement {
       if (el && el?.[0]?.childNodes?.[1]) {
         (el?.[0].childNodes[1] as HTMLElement).style.display = 'flex';
         (el?.[0].childNodes[1] as HTMLElement).style.height = '100%';
-        (el?.[0].childNodes[1] as HTMLElement).style.justifyContent = 'center';
+        (el?.[0].childNodes[1] as HTMLElement).style.justifyContent = 'left';
         (el?.[0].childNodes[1] as HTMLElement).style.alignItems = 'center';
-        (el?.[0].childNodes[1] as HTMLElement).style.textAlign = 'center';
+        (el?.[0].childNodes[1] as HTMLElement).style.textAlign = 'left';
       }
     });
 

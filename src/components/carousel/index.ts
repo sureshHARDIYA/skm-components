@@ -41,17 +41,6 @@ export default class SKMCarousel extends LitElement {
 
   firstUpdated() {
     this.checkActive(this.currentSlide);
-
-    // if (this.children.length)
-    //   setInterval(() => {
-    //     this.currentSlide =
-    //       this.currentSlide < this.children.length - 1
-    //         ? this.currentSlide + 1
-    //         : (this.currentSlide = 0);
-
-    //     this.checkActive(this.currentSlide);
-    //   }, 5000);
-
     this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
       this.changeSlide();
     });
