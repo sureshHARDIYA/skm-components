@@ -59,6 +59,17 @@ export default css`
     backface-visibility: hidden;
     padding: 5rem;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    
+    .slide-trigger {
+      position: absolute;
+      bottom: 7px;
+      border: none;
+      float: right;
+      right: 10px;
+      padding: 1rem;
+      cursor: pointer;
+      background: transparent;
+    }
   }
 
   .flip-box-front {
@@ -68,6 +79,7 @@ export default css`
     align-items: center;
     display: flex;
     justify-content: center;
+
   }
 
   .flip-box-back {

@@ -49,9 +49,11 @@ export default class SKMFlipSlide extends LitElement {
       <div class="flip-box-inner">
         <div class="flip-box-back">
           <slot name="slide-back"></slot>
+          <button class="slide-trigger">Click to flip</button>
         </div>
         <div class="flip-box-front">
           <slot name="slide-front"></slot>
+          <button class="slide-trigger">Click to flip</button>
         </div>
       </div>
     </div>`;

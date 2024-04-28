@@ -39,12 +39,12 @@ export default css`
           height: 40px;
           width: 40px;
           border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.7);
           opacity: 0.5;
           transition: ease 0.3s;
           cursor: pointer;
-  
+          
           &:hover {
+            background-color: rgba(255, 255, 255, 0.7);
             opacity: 1;
           }
         }
