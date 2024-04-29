@@ -56,7 +56,7 @@ export default class SKMCarousel extends LitElement {
   }
 
   render() {
-    return html`<div class="container">
+    return html`<div class="skm-container">
       <div class="carousel">
         <div class="slides">
           <slot></slot>

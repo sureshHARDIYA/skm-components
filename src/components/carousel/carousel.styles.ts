@@ -6,7 +6,7 @@ export default css`
     0% { opacity: 0.2; }
     100% { opacity: 1; }
   }
-  .container{
+  .skm-container{
     position: relative;
     display: flex;
     align-items: center;
