@@ -26,7 +26,7 @@ export default css`
     background-color: transparent;
     height: 300px;
     perspective: 1000px;
-    animation: fadeIn 1s;
+    animation: fadeIn 1s ease-out;
   }
 
   .flip-box-inner {
@@ -59,7 +59,7 @@ export default css`
     backface-visibility: hidden;
     padding: 5rem;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    
+
     .slide-trigger {
       position: absolute;
       bottom: 7px;
@@ -79,7 +79,6 @@ export default css`
     align-items: center;
     display: flex;
     justify-content: center;
-
   }
 
   .flip-box-back {

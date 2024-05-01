@@ -1,7 +1,6 @@
 import { css } from 'lit';
 
 export default css`
-
   @keyframes fadeIn {
     0% { opacity: 0.2; }
     100% { opacity: 1; }
@@ -64,7 +63,7 @@ export default css`
           align-items: center;
           justify-content: center;
           display: none;
-          animation:  fadeIn 2s;
+          animation:  fadeIn 2s ease-out;
         }
 
         ::slotted(skm-flip-slide[selected="true"]) {
