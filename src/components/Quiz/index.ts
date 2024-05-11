@@ -1,10 +1,11 @@
 import { Task } from '@lit/task';
-import { html, LitElement, PropertyValueMap } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
+
 import quizStyle from './quizStyle';
 
 @customElement('sas-quiz-loader')
@@ -20,7 +21,6 @@ export class SKMQuiz extends LitElement {
   @property({ type: String, attribute: 'data-slug' }) dataSlug: string;
   @property({ type: String, attribute: 'data-title' }) dataTitle: string;
 
-  @state() isOpen = false;
 
   constructor() {
     super();
@@ -35,17 +35,37 @@ export class SKMQuiz extends LitElement {
         <p class="quiz-title">${this.dataTitle}!</p>
         <button @click="${this._handleClick}" class="start-quiz">Start Quiz</button>
       </div>
-      <sl-drawer label="Drawer" class="drawer-overview" style="--size: 50vw;">
-        something iwll this.compareDocumentPosition..
+      <sl-drawer label="${this.dataTitle}" class="drawer-overview" style="--size: 50vw;">
+      ${this._fetchQuizDataTask.render({
+        initial: () => html`<p>Waiting to start task</p>`,
+        pending: () => html`<p>Loading quiz data ...</p>`,
+        complete: (value) => html`
+        <div class="outer-wrapper">
+          ${value.description}
+          <div class="questions">
+            ${value?.questions.map((question: any) => html`
+              <div class="question">
+                <p>${question.title}</p>
+                <div class="options">
+                  ${question.answer.map((option: any) => html`
+                    <label>
+                      <input type="radio" name="${question.id}" value="${option.id}" />
+                      ${option.option}
+                    </label>
+                  `)}
+                </div>
+              </div>
+            `)}
+        </div>`,
+        error: (error) => html`<p>Oops, something went wrong: ${error}</p>`,
+      })}
         <sl-button slot="footer" variant="primary">Close</sl-button>
       </sl-drawer>
-      <sl-button>Open Drawer</sl-button>
     </div>`;
   }
 
   protected firstUpdated(): void {
-    console.log('firstUpdated');
-    console.log(this.isOpen);
+    console.log('firstUpdated', this._fetchQuizDataTask);
   }
 
   _handleClick() {
@@ -59,24 +79,24 @@ export class SKMQuiz extends LitElement {
         (drawer as any).hide();
       });
     }
-    this._fetchQuizDataTask.run([this.dataSlug]);
+    this._fetchQuizDataTask.run();
   }
 
   private _fetchQuizDataTask = new Task(this, {
     task: async () => {
+      console.log('fetching quiz data', this.dataSlug);
       const username = 'itsmeskm99@gmail.com';
       const password = 'Testing123#';
       const headers = new Headers();
       headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
 
       const response = await fetch(
-        `https://dev.api.inspireu2iti.com/api/v1/quiz/${slug}?expand=questions`,
+        `https://dev.api.inspireu2iti.com/api/v1/quiz/${this.dataSlug}/?expand=questions`,
         {
           headers
         }
       );
       return response.json();
     },
-    args: () => []
   });
 }
