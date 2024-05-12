@@ -8,6 +8,8 @@ import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
 
 import quizStyle from './quizStyle';
 
+import './Questions'
+
 @customElement('sas-quiz-loader')
 export class SKMQuiz extends LitElement {
   static readonly styles = [quizStyle];
@@ -43,29 +45,13 @@ export class SKMQuiz extends LitElement {
         <div class="outer-wrapper">
           ${value.description}
           <div class="questions">
-            ${value?.questions.map((question: any) => html`
-              <div class="question">
-                <p>${question.title}</p>
-                <div class="options">
-                  ${question.answer.map((option: any) => html`
-                    <label>
-                      <input type="radio" name="${question.id}" value="${option.id}" />
-                      ${option.option}
-                    </label>
-                  `)}
-                </div>
-              </div>
-            `)}
+            <quiz-questions .questions=${value.questions}=></quiz-questions>
         </div>`,
         error: (error) => html`<p>Oops, something went wrong: ${error}</p>`,
       })}
         <sl-button slot="footer" variant="primary">Close</sl-button>
       </sl-drawer>
     </div>`;
-  }
-
-  protected firstUpdated(): void {
-    console.log('firstUpdated', this._fetchQuizDataTask);
   }
 
   _handleClick() {
@@ -84,7 +70,6 @@ export class SKMQuiz extends LitElement {
 
   private _fetchQuizDataTask = new Task(this, {
     task: async () => {
-      console.log('fetching quiz data', this.dataSlug);
       const username = 'itsmeskm99@gmail.com';
       const password = 'Testing123#';
       const headers = new Headers();
