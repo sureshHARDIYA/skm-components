@@ -45,7 +45,7 @@ export class SKMQuiz extends LitElement {
         <div class="outer-wrapper">
           ${value.description}
           <div class="questions">
-            <quiz-questions .questions=${value.questions}=></quiz-questions>
+            <quiz-questions .questions=${value.questions}></quiz-questions>
         </div>`,
         error: (error) => html`<p>Oops, something went wrong: ${error}</p>`,
       })}
