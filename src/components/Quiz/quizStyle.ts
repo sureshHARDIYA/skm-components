@@ -1,6 +1,11 @@
 import { css } from 'lit';
 
 export default css`
+  :host {
+    .drawer__panel {
+      background-color: #f9f9f9;
+    }
+  }
   .skm-quiz-container {
     width: 100%;
     display: flex;
@@ -26,6 +31,10 @@ export default css`
       display: inline-block;
       cursor: pointer;
       border-radius: 10px;
+    }
+
+    .dialog__body {
+      border: 1px solid #dadada;
     }
   }
 `;
