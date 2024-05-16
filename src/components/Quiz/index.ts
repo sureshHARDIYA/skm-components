@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { asyncReplace } from 'lit/directives/async-replace.js';
 
@@ -35,13 +35,25 @@ export class SKMQuiz extends LitElement {
     this.quizData = null;
   }
 
+  protected firstUpdated(): void {
+    const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
+    dialog?.addEventListener('sl-request-close', (event: any) => {
+      if (event.detail.source === 'overlay') {
+        event.preventDefault();
+      }
+    });
+  }
+
   render() {
     return html`<div class="skm-quiz-outer-wrapper">
       <div class="skm-quiz-container">
         <p class="quiz-title">${this.dataTitle}</p>
         <button @click="${this._handleClick}" class="start-quiz">Start Quiz</button>
       </div>
-      <sl-dialog label="${this.dataTitle}" class="dialog-width" style="--width: 50vw;">
+      <sl-dialog
+        label="${this.dataTitle}"
+        class="dialog-width dialog-deny-close"
+        style="--width: 50vw;">
         ${asyncReplace(this.renderSecondComponent())}
         <sl-button slot="footer" variant="primary">Close</sl-button>
       </sl-dialog>
