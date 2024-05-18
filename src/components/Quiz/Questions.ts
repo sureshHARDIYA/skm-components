@@ -16,6 +16,7 @@ export class QuizQuestions extends LitElement {
 
   @property({ type: Array }) questions: any[] = [];
   @property({ type: Number }) totalQuestions = 0;
+
   @state() currentQuestionIndex = 0;
   @state() selectedOptions: { [key: number]: { optionId: string; isCorrect: boolean } } = {};
   @state() response: { question: number; answers: string[]; text_answer?: string }[] = [];
@@ -23,7 +24,6 @@ export class QuizQuestions extends LitElement {
   render() {
     const isLastQuestion = this.currentQuestionIndex === this.totalQuestions - 1;
     const currentQuestion = this.questions[this.currentQuestionIndex];
-
     const hasSelectedOption = this.selectedOptions[this.currentQuestionIndex] !== undefined;
 
     return html`
@@ -40,12 +40,12 @@ export class QuizQuestions extends LitElement {
               >Previous</sl-button
             >
             ${!isLastQuestion
-              ? html`<sl-button
-                  variant="default"
+              ? html`<button
+                  class="next-button"
                   ?disabled=${!hasSelectedOption}
-                  @click=${this.handleNext}
-                  >Next</sl-button
-                >`
+                  @click=${this.handleNext}>
+                  Next
+                </button>`
               : html``}
             ${isLastQuestion
               ? html`<sl-button variant="primary" @click=${this.handleSubmit}>Submit</sl-button>`
@@ -67,7 +67,7 @@ export class QuizQuestions extends LitElement {
           <sl-radio-group
             id="answer-${this.currentQuestionIndex}"
             name="answer-${this.currentQuestionIndex}"
-            @sl-change=${(e: any) => this.handleOptionClick(e)}
+            @sl-change=${this.handleOptionClick}
             value=${selectedOption}>
             ${question.answer.map(
               (option: any) =>
@@ -83,7 +83,7 @@ export class QuizQuestions extends LitElement {
                 name="answer"
                 .checked=${this.isOptionSelected(option.answer_text)}
                 .value=${option.answer_text}
-                @sl-change=${(e: any) => this.handleOptionClick(e)}
+                @sl-change=${this.handleOptionClick}
                 >${option.answer_text}</sl-checkbox
               >
             `
@@ -92,7 +92,7 @@ export class QuizQuestions extends LitElement {
       case 2: // Text answer
         return html`<sl-textarea
           name="answer"
-          @input=${(e: any) => this.handleFreeTextChange(e)}
+          @input=${this.handleFreeTextChange}
           value=${selectedOption}
           placeholder="Enter your answer here"></sl-textarea>`;
       default:
@@ -112,24 +112,22 @@ export class QuizQuestions extends LitElement {
       (answer: any) => answer.answer_text === optionId
     )?.is_correct_answer;
 
-    this.selectedOptions = {
-      ...this.selectedOptions,
-      [questionIndex]: { optionId, isCorrect }
-    };
-
-    this.updateResponse(questionIndex, optionId);
+    this.updateSelectedOptions(questionIndex, optionId, isCorrect);
   }
 
   handleFreeTextChange(event: any) {
     const value = event.target.value;
     const questionIndex = this.currentQuestionIndex;
 
+    this.updateSelectedOptions(questionIndex, value, true);
+  }
+
+  updateSelectedOptions(questionIndex: number, optionId: string, isCorrect: boolean) {
     this.selectedOptions = {
       ...this.selectedOptions,
-      [questionIndex]: { optionId: value, isCorrect: true }
+      [questionIndex]: { optionId, isCorrect }
     };
-
-    this.updateResponse(questionIndex, value, true);
+    this.updateResponse(questionIndex, optionId, isCorrect);
   }
 
   handlePrevious() {
