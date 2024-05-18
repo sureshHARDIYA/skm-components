@@ -9,6 +9,7 @@ import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import quizStyle from './quizStyle';
 
 import './Questions';
+import { API_ROOT, password, username } from './constants';
 
 @customElement('sas-quiz-loader')
 export class SKMQuiz extends LitElement {
@@ -22,6 +23,9 @@ export class SKMQuiz extends LitElement {
   @property({ type: String, attribute: 'data-id' }) dataId: string;
   @property({ type: String, attribute: 'data-slug' }) dataSlug: string;
   @property({ type: String, attribute: 'data-title' }) dataTitle: string;
+  @property({ type: String })
+  activeSessionId!: string;
+
   @property() loading: boolean;
   @property() quizData: null;
   @property() totalQuestions = 0;
@@ -111,26 +115,75 @@ export class SKMQuiz extends LitElement {
       (drawer as any).show();
     }
     await this.fetchData();
+
+    await this.createSession();
   }
 
   async fetchData() {
     this.loading = true;
-    const username = 'itsmeskm99@gmail.com';
-    const password = 'Testing123#';
+
     const headers = new Headers();
     headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
 
-    const response = await fetch(
-      `https://dev.api.inspireu2iti.com/api/v1/quiz/${this.dataSlug}/?expand=questions`,
-      {
-        headers
-      }
-    );
+    const response = await fetch(`${API_ROOT}v1/quiz/${this.dataSlug}/?expand=questions`, {
+      headers
+    });
     const data = await response.json();
 
     this.quizData = data.questions;
     this.totalQuestions = (this.quizData || [])?.length;
     this.loading = false;
     this.requestUpdate();
+  }
+
+  async createSession() {
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
+    headers.append('Content-Type', 'application/json');
+
+    const activeQuizSession = localStorage.getItem('activeQuizSession');
+
+    if (activeQuizSession) {
+      try {
+        const sessionData = JSON.parse(activeQuizSession);
+        if (sessionData.activeSessionId && sessionData.dataSlug) {
+          console.log('Using existing session:', sessionData);
+          // Use the existing session data as needed
+          return sessionData;
+        }
+      } catch (error) {
+        console.error('Failed to parse active quiz session from localStorage:', error);
+      }
+    }
+
+    // If no valid session exists, create a new one
+    try {
+      const response = await fetch(`${API_ROOT}v1/quizzes/${this.dataSlug}/start/`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          quiz: this.dataId,
+          slug: this.dataSlug
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error creating session: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Store the new session data in localStorage
+      const sessionData = {
+        activeSessionId: data.id,
+        dataSlug: this.dataSlug
+      };
+      localStorage.setItem('activeQuizSession', JSON.stringify(sessionData));
+
+      return sessionData;
+    } catch (error) {
+      console.error('Failed to create a new session:', error);
+      throw error;
+    }
   }
 }
