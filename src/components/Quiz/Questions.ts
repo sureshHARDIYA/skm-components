@@ -116,6 +116,8 @@ export class QuizQuestions extends LitElement {
       ...this.selectedOptions,
       [questionIndex]: { optionId, isCorrect }
     };
+
+    this.updateResponse(questionIndex, optionId);
   }
 
   handleFreeTextChange(event: any) {
@@ -126,6 +128,8 @@ export class QuizQuestions extends LitElement {
       ...this.selectedOptions,
       [questionIndex]: { optionId: value, isCorrect: true }
     };
+
+    this.updateResponse(questionIndex, value, true);
   }
 
   handlePrevious() {
@@ -135,31 +139,34 @@ export class QuizQuestions extends LitElement {
   }
 
   handleNext() {
-    this.updateResponse();
     if (this.currentQuestionIndex < this.totalQuestions - 1) {
       this.currentQuestionIndex += 1;
     }
   }
 
   handleSubmit() {
-    this.updateResponse();
     console.log('Response:', this.response);
     // Handle submission
   }
 
-  updateResponse() {
-    const currentResponse = this.response.find((res) => res.question === this.currentQuestionIndex);
+  updateResponse(questionIndex: number, optionId: string, isTextAnswer: boolean = false) {
+    const currentResponse = this.response.find((res) => res.question === questionIndex);
 
     if (currentResponse) {
-      currentResponse.answers = [this.selectedOptions[this.currentQuestionIndex].optionId];
-      currentResponse.text_answer = this.selectedOptions[this.currentQuestionIndex]?.optionId;
+      if (isTextAnswer) {
+        currentResponse.text_answer = optionId;
+        currentResponse.answers = [];
+      } else {
+        currentResponse.answers = [optionId];
+        currentResponse.text_answer = '';
+      }
     } else {
       this.response = [
         ...this.response,
         {
-          question: this.currentQuestionIndex,
-          answers: [this.selectedOptions[this.currentQuestionIndex].optionId],
-          text_answer: this.selectedOptions[this.currentQuestionIndex]?.optionId
+          question: questionIndex,
+          answers: isTextAnswer ? [] : [optionId],
+          text_answer: isTextAnswer ? optionId : ''
         }
       ];
     }
