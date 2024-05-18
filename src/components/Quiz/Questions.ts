@@ -29,7 +29,12 @@ export class QuizQuestions extends LitElement {
 
     return html`
       <div class="skm-quiz-outer-wrapper">
-        <sl-badge>${this.totalQuestions} questions</sl-badge>
+        <div class="meta-info">
+          <sl-badge>${this.totalQuestions} questions</sl-badge>
+          <sl-badge variant="primary" pill pulse
+            >${this.currentQuestionIndex + 1}/${this.totalQuestions}</sl-badge
+          >
+        </div>
         <div class="question-wrapper">
           <div class="question">${currentQuestion.title}</div>
           <div class="answers">${this.renderAnswerInput()}</div>
@@ -93,6 +98,7 @@ export class QuizQuestions extends LitElement {
         `;
       case 2: // Text answer
         return html`<sl-textarea
+          autofocus
           name="answer"
           @input=${this.handleFreeTextChange}
           value=${selectedOption}

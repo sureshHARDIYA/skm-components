@@ -5,6 +5,7 @@ export default css`
     border-top: 1px solid #dadada;
     border-bottom: 1px solid #dadada;
   }
+
   .skm-quiz-container {
     width: 100%;
     display: flex;

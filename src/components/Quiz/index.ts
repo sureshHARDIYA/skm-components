@@ -1,4 +1,4 @@
-import { html, LitElement, PropertyValueMap } from 'lit';
+import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { asyncReplace } from 'lit/directives/async-replace.js';
 
@@ -37,10 +37,36 @@ export class SKMQuiz extends LitElement {
 
   protected firstUpdated(): void {
     const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
+    const alertDialog = this.shadowRoot?.querySelector('.quiz-progress-alert') as HTMLElement;
+
     dialog?.addEventListener('sl-request-close', (event: any) => {
       if (event.detail.source === 'overlay') {
         event.preventDefault();
       }
+
+      if (event.detail.source === 'close-button') {
+        event.preventDefault();
+        (alertDialog as any)?.show();
+      }
+    });
+
+    alertDialog?.addEventListener('sl-request-close', (event: any) => {
+      if (event.detail.source === 'overlay') {
+        event.preventDefault();
+      }
+    });
+
+    const closeButton = this.shadowRoot?.querySelector('sl-button[class="close-active-quiz"]');
+    const continueButton = this.shadowRoot?.querySelector(
+      'sl-button[class="continue-active-quiz"]'
+    );
+    continueButton?.addEventListener('click', () => {
+      (alertDialog as any)?.hide();
+    });
+
+    closeButton?.addEventListener('click', () => {
+      (alertDialog as any)?.hide();
+      (dialog as any)?.hide();
     });
   }
 
@@ -55,7 +81,15 @@ export class SKMQuiz extends LitElement {
         class="dialog-width dialog-deny-close"
         style="--width: 50vw;">
         ${asyncReplace(this.renderSecondComponent())}
-        <sl-button slot="footer" variant="primary">Close</sl-button>
+      </sl-dialog>
+      <sl-dialog label="Active Quiz Session" class="quiz-progress-alert">
+        You have an active quiz session running.
+        <strong>Are you sure you want to close it?</strong> Your progress will be
+        <strong>lost</strong>.
+        <div slot="footer" class="alert-footer-quiz">
+          <sl-button variant="danger" class="close-active-quiz">Close the quiz</sl-button>
+          <sl-button variant="success" class="continue-active-quiz">Continue with Quiz</sl-button>
+        </div>
       </sl-dialog>
     </div>`;
   }
@@ -75,12 +109,6 @@ export class SKMQuiz extends LitElement {
     const drawer = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
     if (drawer) {
       (drawer as any).show();
-    }
-    const closeButton = drawer.querySelector('sl-button[variant="primary"]');
-    if (closeButton) {
-      closeButton.addEventListener('click', () => {
-        (drawer as any).hide();
-      });
     }
     await this.fetchData();
   }
