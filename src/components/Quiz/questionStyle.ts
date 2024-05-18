@@ -14,10 +14,14 @@ export default css`
     }
     sl-radio {
       padding: 10px;
+      cursor: pointer;
 
       &:hover {
         background: #f0f0f0;
       }
+    }
+    sl-radio[aria-checked='true'] {
+      background: #e0e0e0;
     }
     sl-radio:not(:last-child) {
       border-bottom: 1px solid #dadada;
@@ -28,6 +32,7 @@ export default css`
       justify-content: space-between;
       margin-top: 1rem;
 
+      .previous-button,
       .next-button {
         background-color: var(--sl-color-neutral-0);
         border-color: var(--sl-color-neutral-300);
@@ -35,8 +40,7 @@ export default css`
         border-style: solid;
         border-width: var(--sl-input-border-width);
         cursor: pointer;
-        padding-left: var(--sl-spacing-large);
-        padding-right: var(--sl-spacing-large);
+        padding: var(--sl-spacing-small);
 
         &:disabled {
           color: var(--sl-color-neutral-400);

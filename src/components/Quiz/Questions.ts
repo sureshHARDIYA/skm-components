@@ -16,6 +16,7 @@ export class QuizQuestions extends LitElement {
 
   @property({ type: Array }) questions: any[] = [];
   @property({ type: Number }) totalQuestions = 0;
+  @property({ type: Boolean, attribute: true }) isDisabled = false;
 
   @state() currentQuestionIndex = 0;
   @state() selectedOptions: { [key: number]: { optionId: string; isCorrect: boolean } } = {};
@@ -33,12 +34,13 @@ export class QuizQuestions extends LitElement {
           <div class="question">${currentQuestion.title}</div>
           <div class="answers">${this.renderAnswerInput()}</div>
           <div class="question-nav">
-            <sl-button
+            <button
               variant="default"
+              class="previous-button"
               ?disabled=${this.currentQuestionIndex === 0}
-              @click=${this.handlePrevious}
-              >Previous</sl-button
-            >
+              @click=${this.handlePrevious}>
+              Previous
+            </button>
             ${!isLastQuestion
               ? html`<button
                   class="next-button"
