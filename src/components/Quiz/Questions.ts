@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@shoelace-style/shoelace/dist/components/badge/badge.js';
+import '@shoelace-style/shoelace/dist/components/alert/alert.js';
 import '@shoelace-style/shoelace/dist/components/radio/radio.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
@@ -9,6 +10,7 @@ import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
 import '@shoelace-style/shoelace/dist/components/radio-group/radio-group.js';
 
 import questionStyle from './questionStyle';
+import { API_ROOT, password, username } from './constants';
 
 @customElement('quiz-questions')
 export class QuizQuestions extends LitElement {
@@ -59,6 +61,12 @@ export class QuizQuestions extends LitElement {
               : html``}
           </div>
         </div>
+        <div class="alert-toast">
+          <sl-alert variant="success" duration="3000" closable>
+            <strong>Your answers have been submitted successfully. </strong><br />
+            You can safely close the dialog now.
+          </sl-alert>
+        </div>
       </div>
     `;
   }
@@ -78,7 +86,7 @@ export class QuizQuestions extends LitElement {
             value=${selectedOption}>
             ${question.answer.map(
               (option: any) =>
-                html` <sl-radio value=${option.answer_text}> ${option.answer_text} </sl-radio> `
+                html` <sl-radio value=${option.id}> ${option.answer_text} </sl-radio> `
             )}
           </sl-radio-group>
         `;
@@ -114,28 +122,29 @@ export class QuizQuestions extends LitElement {
 
   handleOptionClick(event: any) {
     const optionId = event.target.value;
-    const questionIndex = this.currentQuestionIndex;
 
-    const isCorrect = this.questions[questionIndex].answer.find(
+    const questionId = this.questions[this.currentQuestionIndex].id;
+
+    const isCorrect = this.questions[this.currentQuestionIndex].answer.find(
       (answer: any) => answer.answer_text === optionId
     )?.is_correct_answer;
 
-    this.updateSelectedOptions(questionIndex, optionId, isCorrect);
+    this.updateSelectedOptions(questionId, optionId, isCorrect);
   }
 
   handleFreeTextChange(event: any) {
     const value = event.target.value;
-    const questionIndex = this.currentQuestionIndex;
+    const questionId = this.questions[this.currentQuestionIndex].id;
 
-    this.updateSelectedOptions(questionIndex, value, true);
+    this.updateSelectedOptions(questionId, value, true);
   }
 
-  updateSelectedOptions(questionIndex: number, optionId: string, isCorrect: boolean) {
+  updateSelectedOptions(questionId: number, optionId: string, isCorrect: boolean) {
     this.selectedOptions = {
       ...this.selectedOptions,
-      [questionIndex]: { optionId, isCorrect }
+      [this.currentQuestionIndex]: { optionId, isCorrect }
     };
-    this.updateResponse(questionIndex, optionId, isCorrect);
+    this.updateResponse(questionId, optionId);
   }
 
   handlePrevious() {
@@ -150,29 +159,75 @@ export class QuizQuestions extends LitElement {
     }
   }
 
-  handleSubmit() {
-    console.log('Response:', this.response);
-    // Handle submission
+  async handleSubmit() {
+    try {
+      const activeQuizSession = localStorage.getItem('activeQuizSession');
+      if (activeQuizSession) {
+        const session = JSON.parse(activeQuizSession);
+        const activeSessionId = session.activeSessionId;
+        const sessionSlug = session.dataSlug;
+
+        const headers = new Headers();
+        headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
+        headers.append('Content-Type', 'application/json');
+
+        const response = await fetch(
+          `${API_ROOT}v1/quizzes/${sessionSlug}/complete/${activeSessionId}/`,
+          {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(this.response)
+          }
+        );
+
+        if (response?.ok) {
+          const container = this.shadowRoot?.querySelector('.alert-toast');
+          const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
+          const alert = container?.querySelector(`sl-alert[variant="success"]`);
+          console.log('container found', this.shadowRoot);
+
+          (alert as any)?.toast();
+          (dialog as any)?.hide();
+
+          localStorage.removeItem('activeQuizSession');
+        } else {
+          const errorData = await response.json();
+          alert(`Error: ${errorData.message || response.statusText}`);
+        }
+      } else {
+        alert('No active session found.');
+      }
+    } catch (error) {
+      console.error('Failed to parse active quiz session from localStorage:', error);
+      alert('An error occurred while submitting the quiz.');
+    }
+
+    // Handle any additional submission logic if needed
   }
 
-  updateResponse(questionIndex: number, optionId: string, isTextAnswer: boolean = false) {
-    const currentResponse = this.response.find((res) => res.question === questionIndex);
+  updateResponse(questionId: number, optionId: string) {
+    const currentResponse = this.response.find((res) => res.question === questionId);
+    const isFreeText = this.questions[this.currentQuestionIndex].technique === 2;
 
+    /** If already responsed */
     if (currentResponse) {
-      if (isTextAnswer) {
+      if (isFreeText) {
         currentResponse.text_answer = optionId;
         currentResponse.answers = [];
       } else {
         currentResponse.answers = [optionId];
-        currentResponse.text_answer = '';
       }
-    } else {
+    }
+
+    if (!currentResponse) {
       this.response = [
         ...this.response,
         {
-          question: questionIndex,
-          answers: isTextAnswer ? [] : [optionId],
-          text_answer: isTextAnswer ? optionId : ''
+          question: questionId,
+          answers: isFreeText ? [] : [optionId],
+          ...(isFreeText && {
+            text_answer: optionId
+          })
         }
       ];
     }
