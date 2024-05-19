@@ -1,4 +1,4 @@
-import { html, LitElement, PropertyValueMap } from 'lit';
+import { html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@shoelace-style/shoelace/dist/components/badge/badge.js';
