@@ -62,9 +62,13 @@ export class QuizQuestions extends LitElement {
           </div>
         </div>
         <div class="alert-toast">
-          <sl-alert variant="success" duration="3000" closable>
+          <sl-alert variant="success" duration="5000" closable>
             <strong>Your answers have been submitted successfully. </strong><br />
             You can safely close the dialog now.
+          </sl-alert>
+          <sl-alert variant="danger" closable duration="5000">
+            <strong>Failed to submit your answers. </strong><br />
+            Please try again later. Admin has been notified about this issue.
           </sl-alert>
         </div>
       </div>
@@ -180,27 +184,23 @@ export class QuizQuestions extends LitElement {
           }
         );
 
-        if (response?.ok) {
-          const container = this.shadowRoot?.querySelector('.alert-toast');
-          const alert = container?.querySelector(`sl-alert[variant="success"]`);
-          console.log('container found', this.shadowRoot);
+        const container = this.shadowRoot?.querySelector('.alert-toast');
 
+        if (response?.ok) {
+          const alert = container?.querySelector(`sl-alert[variant="success"]`);
           (alert as any)?.toast();
 
-          // Emit custom event to inform parent component
+          // Emit custom event to inform parent component to close the dialog after submission
           this.dispatchEvent(new CustomEvent('quiz-submitted', { bubbles: true, composed: true }));
 
           localStorage.removeItem('activeQuizSession');
         } else {
-          const errorData = await response.json();
-          alert(`Error: ${errorData.message || response.statusText}`);
+          const dangerAlert = container?.querySelector(`sl-alert[variant="danger"]`);
+          (dangerAlert as any)?.toast();
         }
-      } else {
-        alert('No active session found.');
       }
     } catch (error) {
       console.error('Failed to parse active quiz session from localStorage:', error);
-      alert('An error occurred while submitting the quiz.');
     }
   }
 

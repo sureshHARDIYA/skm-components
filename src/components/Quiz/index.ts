@@ -10,6 +10,7 @@ import quizStyle from './quizStyle';
 
 import './Questions';
 import { API_ROOT, password, username } from './constants';
+import { isValidJSON } from './utils';
 
 @customElement('sas-quiz-loader')
 export class SKMQuiz extends LitElement {
@@ -23,8 +24,6 @@ export class SKMQuiz extends LitElement {
   @property({ type: String, attribute: 'data-id' }) dataId: string;
   @property({ type: String, attribute: 'data-slug' }) dataSlug: string;
   @property({ type: String, attribute: 'data-title' }) dataTitle: string;
-  @property({ type: String })
-  activeSessionId!: string;
 
   @property() loading: boolean;
   @property() quizData: null;
@@ -68,12 +67,19 @@ export class SKMQuiz extends LitElement {
       (alertDialog as any)?.hide();
     });
 
+    /**
+     * If the user decides to close the active quiz session, we hide both the dialogs.
+     * And remove the active quiz session from localStorage.
+     */
     closeButton?.addEventListener('click', () => {
       (alertDialog as any)?.hide();
       (dialog as any)?.hide();
+      localStorage.removeItem('activeQuizSession');
     });
 
-    // Listen for the custom event and close the dialog
+    /**
+     * Listen for the custom event emitted from the child component to close the dialog
+     */
     this.addEventListener('quiz-submitted', () => {
       (dialog as any)?.hide();
     });
@@ -142,27 +148,18 @@ export class SKMQuiz extends LitElement {
   }
 
   async createSession() {
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
-    headers.append('Content-Type', 'application/json');
-
     const activeQuizSession = localStorage.getItem('activeQuizSession');
 
-    if (activeQuizSession) {
-      try {
-        const sessionData = JSON.parse(activeQuizSession);
-        if (sessionData.activeSessionId && sessionData.dataSlug) {
-          console.log('Using existing session:', sessionData);
-          // Use the existing session data as needed
-          return sessionData;
-        }
-      } catch (error) {
-        console.error('Failed to parse active quiz session from localStorage:', error);
-      }
+    if (activeQuizSession && isValidJSON(activeQuizSession)) {
+      return null;
     }
 
     // If no valid session exists, create a new one
     try {
+      const headers = new Headers();
+      headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
+      headers.append('Content-Type', 'application/json');
+
       const response = await fetch(`${API_ROOT}v1/quizzes/${this.dataSlug}/start/`, {
         method: 'POST',
         headers,
