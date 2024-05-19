@@ -1,6 +1,19 @@
 import { css } from 'lit';
 
 export default css`
+  sl-skeleton {
+    height: 50px;
+    margin-bottom: 10px;
+  }
+
+  sl-skeleton:nth-child(3) {
+    height: 150px;
+  }
+
+  sl-skeleton::part(indicator) {
+    border-radius: 0;
+  }
+
   sl-dialog::part(body) {
     border-top: 1px solid #dadada;
     border-bottom: 1px solid #dadada;
@@ -8,6 +21,7 @@ export default css`
 
   .skm-quiz-container {
     width: 100%;
+
     display: flex;
     border: 1px solid #dadada;
     padding: 10px;

@@ -5,6 +5,7 @@ import { asyncReplace } from 'lit/directives/async-replace.js';
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
+import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js';
 
 import quizStyle from './quizStyle';
 
@@ -111,7 +112,11 @@ export class SKMQuiz extends LitElement {
 
   async *renderSecondComponent() {
     if (this.loading) {
-      yield html`<div>Loading...</div>`;
+      yield html`<div class="loading-quiz">
+        <sl-skeleton effect="pulse"></sl-skeleton>
+        <sl-skeleton effect="pulse"></sl-skeleton>
+        <sl-skeleton effect="pulse"></sl-skeleton>
+      </div>`;
     }
     if (this.quizData) {
       yield html`<quiz-questions
