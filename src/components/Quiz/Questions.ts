@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, PropertyValueMap } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import '@shoelace-style/shoelace/dist/components/badge/badge.js';
@@ -24,18 +24,22 @@ export class QuizQuestions extends LitElement {
   @state() currentQuestionIndex = 0;
   @state() selectedOptions: { [key: number]: { optionId: string; isCorrect: boolean } } = {};
   @state() response: { question: number; answers: string[]; text_answer?: string }[] = [];
+  @state() currentAnswer: string | null | undefined = null;
 
   render() {
-    const isLastQuestion = this.currentQuestionIndex === this.totalQuestions - 1;
-    const currentQuestion = this.questions[this.currentQuestionIndex];
-    const hasSelectedOption = this.selectedOptions[this.currentQuestionIndex] !== undefined;
+    const currentQuestionIndex = this.currentQuestionIndex;
+
+    const isLastQuestion = currentQuestionIndex === this.totalQuestions - 1;
+    const currentQuestion = this.questions[currentQuestionIndex];
+    const selectedOption = this.selectedOptions[currentQuestionIndex];
+    const hasSelectedOption = selectedOption && Boolean(selectedOption.optionId);
 
     return html`
       <div class="skm-quiz-outer-wrapper">
         <div class="meta-info">
           <sl-badge>${this.totalQuestions} questions</sl-badge>
           <sl-badge variant="primary" pill pulse
-            >${this.currentQuestionIndex + 1}/${this.totalQuestions}</sl-badge
+            >${currentQuestionIndex + 1}/${this.totalQuestions}</sl-badge
           >
         </div>
         <div class="question-wrapper">
@@ -45,7 +49,7 @@ export class QuizQuestions extends LitElement {
             <button
               variant="default"
               class="previous-button"
-              ?disabled=${this.currentQuestionIndex === 0}
+              ?disabled=${currentQuestionIndex === 0}
               @click=${this.handlePrevious}>
               Previous
             </button>
@@ -58,7 +62,12 @@ export class QuizQuestions extends LitElement {
                 </button>`
               : html``}
             ${isLastQuestion
-              ? html`<sl-button variant="primary" @click=${this.handleSubmit}>Submit</sl-button>`
+              ? html`<sl-button
+                  variant="primary"
+                  @click=${this.handleSubmit}
+                  ?disabled=${!hasSelectedOption}
+                  >Submit</sl-button
+                >`
               : html``}
           </div>
         </div>
