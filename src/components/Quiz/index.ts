@@ -6,6 +6,7 @@ import '@shoelace-style/shoelace/dist/themes/light.css';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js';
+import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
 
 import quizStyle from './quizStyle';
 
@@ -92,12 +93,12 @@ export class SKMQuiz extends LitElement {
         <p class="quiz-title">${this.dataTitle}</p>
         <button @click="${this._handleClick}" class="start-quiz">Start Quiz</button>
       </div>
-      <sl-dialog
+      <sl-drawer
         label="${this.dataTitle}"
         class="dialog-width dialog-deny-close"
-        style="--width: 50vw;">
+        style="--size: 50vw;">
         ${asyncReplace(this.renderSecondComponent())}
-      </sl-dialog>
+      </sl-drawer>
       <sl-dialog label="Active Quiz Session" class="quiz-progress-alert">
         You have an active quiz session running.
         <strong>Are you sure you want to close it?</strong> Your progress will be
