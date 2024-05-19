@@ -17,6 +17,23 @@ export default css`
       .answers {
         padding: 10px;
         background: #f6f6f6;
+
+        sl-checkbox {
+          display: flex;
+          width: 100%;
+          padding: 10px;
+
+          &:hover {
+            background: #f0f0f0;
+          }
+        }
+
+        sl-checkbox[aria-checked='true'] {
+          background: #e0e0e0;
+        }
+        sl-checkbox:not(:last-child) {
+          border-bottom: 1px solid #dadada;
+        }
       }
       sl-radio {
         padding: 10px;

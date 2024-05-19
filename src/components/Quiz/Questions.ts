@@ -13,6 +13,11 @@ import { API_ROOT } from './constants';
 import { prepareHeaders } from './utils';
 import questionStyle from './questionStyle';
 
+const techniqueLabels: { [key: number]: string | number } = {
+  2: 'Free Text',
+  3: 'Survey'
+};
+
 @customElement('quiz-questions')
 export class QuizQuestions extends LitElement {
   static readonly styles = [questionStyle];
@@ -22,22 +27,32 @@ export class QuizQuestions extends LitElement {
   @property({ type: Boolean, attribute: true }) isDisabled = false;
 
   @state() currentQuestionIndex = 0;
-  @state() selectedOptions: { [key: number]: { optionId: string; isCorrect: boolean } } = {};
+  @state() selectedOptions: { [key: number]: { optionId: string[] | string; isCorrect: boolean } } =
+    {};
   @state() response: { question: number; answers: string[]; text_answer?: string }[] = [];
   @state() currentAnswer: string | null | undefined = null;
 
   render() {
     const currentQuestionIndex = this.currentQuestionIndex;
-
     const isLastQuestion = currentQuestionIndex === this.totalQuestions - 1;
     const currentQuestion = this.questions[currentQuestionIndex];
     const selectedOption = this.selectedOptions[currentQuestionIndex];
     const hasSelectedOption = selectedOption && Boolean(selectedOption.optionId);
+    const allAnswersSelected = this.areAllAnswersSelected();
+
+    const totalAnswers =
+      techniqueLabels[currentQuestion.technique] ??
+      `${
+        currentQuestion.answer.filter((item: any) => item.is_correct_answer).length
+      } correct answers`;
 
     return html`
       <div class="skm-quiz-outer-wrapper">
         <div class="meta-info">
-          <sl-badge>${this.totalQuestions} questions</sl-badge>
+          <div>
+            <sl-badge>${this.totalQuestions} questions</sl-badge>
+            <sl-badge>${totalAnswers}</sl-badge>
+          </div>
           <sl-badge variant="primary" pill pulse
             >${currentQuestionIndex + 1}/${this.totalQuestions}</sl-badge
           >
@@ -56,7 +71,7 @@ export class QuizQuestions extends LitElement {
             ${!isLastQuestion
               ? html`<button
                   class="next-button"
-                  ?disabled=${!hasSelectedOption}
+                  ?disabled=${!hasSelectedOption || !allAnswersSelected}
                   @click=${this.handleNext}>
                   Next
                 </button>`
@@ -65,7 +80,7 @@ export class QuizQuestions extends LitElement {
               ? html`<sl-button
                   variant="primary"
                   @click=${this.handleSubmit}
-                  ?disabled=${!hasSelectedOption}
+                  ?disabled=${!hasSelectedOption || !allAnswersSelected}
                   >Submit</sl-button
                 >`
               : html``}
@@ -110,8 +125,8 @@ export class QuizQuestions extends LitElement {
             (option: any) => html`
               <sl-checkbox
                 name="answer"
-                .checked=${this.isOptionSelected(option.answer_text)}
-                .value=${option.answer_text}
+                .checked=${this.isOptionSelected(option.id)}
+                .value=${option.id}
                 @sl-change=${this.handleOptionClick}
                 >${option.answer_text}</sl-checkbox
               >
@@ -131,16 +146,36 @@ export class QuizQuestions extends LitElement {
   }
 
   isOptionSelected(optionId: string) {
+    const question = this.questions[this.currentQuestionIndex];
+    const hasMultipleAnswers = question.technique === 1;
+
+    if (hasMultipleAnswers) {
+      const selectedOptionsForQuestion =
+        this.selectedOptions[this.currentQuestionIndex]?.optionId || [];
+      return selectedOptionsForQuestion.includes(optionId);
+    }
+
     return this.selectedOptions[this.currentQuestionIndex]?.optionId === optionId;
+  }
+
+  areAllAnswersSelected() {
+    const currentQuestion = this.questions[this.currentQuestionIndex];
+    const hasMultipleAnswers = currentQuestion.technique === 1;
+
+    if (hasMultipleAnswers) {
+      const correctAnswers = currentQuestion.answer.filter((item: any) => item.is_correct_answer);
+      const selectedOptions = this.selectedOptions[this.currentQuestionIndex]?.optionId || [];
+      return selectedOptions.length === correctAnswers.length;
+    }
+
+    return true;
   }
 
   handleOptionClick(event: any) {
     const optionId = event.target.value;
-
     const questionId = this.questions[this.currentQuestionIndex].id;
-
     const isCorrect = this.questions[this.currentQuestionIndex].answer.find(
-      (answer: any) => answer.answer_text === optionId
+      (answer: any) => answer.id === optionId
     )?.is_correct_answer;
 
     this.updateSelectedOptions(questionId, optionId, isCorrect);
@@ -154,11 +189,26 @@ export class QuizQuestions extends LitElement {
   }
 
   updateSelectedOptions(questionId: number, optionId: string, isCorrect: boolean) {
-    this.selectedOptions = {
-      ...this.selectedOptions,
-      [this.currentQuestionIndex]: { optionId, isCorrect }
-    };
-    this.updateResponse(questionId, optionId);
+    const hasMultipleAnswers = this.questions[this.currentQuestionIndex].technique === 1;
+
+    if (hasMultipleAnswers) {
+      const currentSelected: any = this.selectedOptions[this.currentQuestionIndex]?.optionId || [];
+      const newSelected = currentSelected.includes(optionId)
+        ? currentSelected.filter((id: string) => id !== optionId)
+        : [...currentSelected, optionId];
+
+      this.selectedOptions = {
+        ...this.selectedOptions,
+        [this.currentQuestionIndex]: { optionId: newSelected, isCorrect }
+      };
+      this.updateResponse(questionId, newSelected);
+    } else {
+      this.selectedOptions = {
+        ...this.selectedOptions,
+        [this.currentQuestionIndex]: { optionId, isCorrect }
+      };
+      this.updateResponse(questionId, optionId);
+    }
   }
 
   handlePrevious() {
@@ -212,29 +262,31 @@ export class QuizQuestions extends LitElement {
     }
   }
 
-  updateResponse(questionId: number, optionId: string) {
+  updateResponse(questionId: number, optionId: string | string[]) {
     const currentResponse = this.response.find((res) => res.question === questionId);
     const isFreeText = this.questions[this.currentQuestionIndex].technique === 2;
+    const hasMultipleAnswers = this.questions[this.currentQuestionIndex].technique === 1;
 
-    /** If already responsed */
     if (currentResponse) {
       if (isFreeText) {
-        currentResponse.text_answer = optionId;
+        currentResponse.text_answer = optionId as string;
         currentResponse.answers = [];
+      } else if (hasMultipleAnswers) {
+        currentResponse.answers = optionId as string[];
       } else {
-        currentResponse.answers = [optionId];
+        currentResponse.answers = [optionId as string];
       }
-    }
-
-    if (!currentResponse) {
+    } else {
       this.response = [
         ...this.response,
         {
           question: questionId,
-          answers: isFreeText ? [] : [optionId],
-          ...(isFreeText && {
-            text_answer: optionId
-          })
+          answers: isFreeText
+            ? []
+            : hasMultipleAnswers
+            ? (optionId as string[])
+            : [optionId as string],
+          ...(isFreeText && { text_answer: optionId as string })
         }
       ];
     }
