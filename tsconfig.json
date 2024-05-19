@@ -1,12 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2018",
     "module": "es2015",
     "moduleResolution": "node",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "declaration": true,
     "outDir": "./dist",
     "baseUrl": ".",
@@ -21,7 +18,5 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }
