@@ -20,8 +20,6 @@ export default css`
   }
 
   .skm-quiz-container {
-    width: 100%;
-
     display: flex;
     border: 1px solid #dadada;
     padding: 10px;
