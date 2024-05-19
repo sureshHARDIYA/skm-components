@@ -9,8 +9,9 @@ import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
 import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
 import '@shoelace-style/shoelace/dist/components/radio-group/radio-group.js';
 
+import { API_ROOT } from './constants';
+import { prepareHeaders } from './utils';
 import questionStyle from './questionStyle';
-import { API_ROOT, password, username } from './constants';
 
 @customElement('quiz-questions')
 export class QuizQuestions extends LitElement {
@@ -171,9 +172,7 @@ export class QuizQuestions extends LitElement {
         const activeSessionId = session.activeSessionId;
         const sessionSlug = session.dataSlug;
 
-        const headers = new Headers();
-        headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
-        headers.append('Content-Type', 'application/json');
+        const headers = prepareHeaders();
 
         const response = await fetch(
           `${API_ROOT}v1/quizzes/${sessionSlug}/complete/${activeSessionId}/`,

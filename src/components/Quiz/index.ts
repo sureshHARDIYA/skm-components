@@ -9,8 +9,8 @@ import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import quizStyle from './quizStyle';
 
 import './Questions';
-import { API_ROOT, password, username } from './constants';
-import { isValidJSON } from './utils';
+import { API_ROOT } from './constants';
+import { isValidJSON, prepareHeaders } from './utils';
 
 @customElement('sas-quiz-loader')
 export class SKMQuiz extends LitElement {
@@ -133,8 +133,7 @@ export class SKMQuiz extends LitElement {
   async fetchData() {
     this.loading = true;
 
-    const headers = new Headers();
-    headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
+    const headers = prepareHeaders();
 
     const response = await fetch(`${API_ROOT}v1/quiz/${this.dataSlug}/?expand=questions`, {
       headers
@@ -156,9 +155,7 @@ export class SKMQuiz extends LitElement {
 
     // If no valid session exists, create a new one
     try {
-      const headers = new Headers();
-      headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
-      headers.append('Content-Type', 'application/json');
+      const headers = prepareHeaders();
 
       const response = await fetch(`${API_ROOT}v1/quizzes/${this.dataSlug}/start/`, {
         method: 'POST',
