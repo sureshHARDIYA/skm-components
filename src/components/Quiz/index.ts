@@ -72,6 +72,11 @@ export class SKMQuiz extends LitElement {
       (alertDialog as any)?.hide();
       (dialog as any)?.hide();
     });
+
+    // Listen for the custom event and close the dialog
+    this.addEventListener('quiz-submitted', () => {
+      (dialog as any)?.hide();
+    });
   }
 
   render() {

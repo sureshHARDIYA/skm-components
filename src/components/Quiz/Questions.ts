@@ -182,12 +182,13 @@ export class QuizQuestions extends LitElement {
 
         if (response?.ok) {
           const container = this.shadowRoot?.querySelector('.alert-toast');
-          const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
           const alert = container?.querySelector(`sl-alert[variant="success"]`);
           console.log('container found', this.shadowRoot);
 
           (alert as any)?.toast();
-          (dialog as any)?.hide();
+
+          // Emit custom event to inform parent component
+          this.dispatchEvent(new CustomEvent('quiz-submitted', { bubbles: true, composed: true }));
 
           localStorage.removeItem('activeQuizSession');
         } else {
@@ -201,8 +202,6 @@ export class QuizQuestions extends LitElement {
       console.error('Failed to parse active quiz session from localStorage:', error);
       alert('An error occurred while submitting the quiz.');
     }
-
-    // Handle any additional submission logic if needed
   }
 
   updateResponse(questionId: number, optionId: string) {
