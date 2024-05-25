@@ -3,10 +3,10 @@ import { customElement, property } from 'lit/decorators.js';
 import { asyncReplace } from 'lit/directives/async-replace.js';
 
 import '@shoelace-style/shoelace/dist/themes/light.css';
-import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
-import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js';
 import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
+import '@shoelace-style/shoelace/dist/components/button/button.js';
+import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js';
 
 import quizStyle from './quizStyle';
 
@@ -91,7 +91,7 @@ export class SKMQuiz extends LitElement {
     return html`<div class="skm-quiz-outer-wrapper">
       <div class="skm-quiz-container">
         <p class="quiz-title">${this.dataTitle}</p>
-        <button @click="${this._handleClick}" class="start-quiz">Start Quiz</button>
+        <button @click="${this._handleClick}" class="start-quiz">Start</button>
       </div>
       <sl-drawer
         label="${this.dataTitle}"
