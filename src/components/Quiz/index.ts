@@ -26,6 +26,7 @@ export class SKMQuiz extends LitElement {
   @property({ type: String, attribute: 'data-id' }) dataId: string;
   @property({ type: String, attribute: 'data-slug' }) dataSlug: string;
   @property({ type: String, attribute: 'data-title' }) dataTitle: string;
+  @property({ type: Number }) drawerWidth: number = window.screen.width;
 
   @property() loading: boolean;
   @property() quizData: null;
@@ -38,11 +39,17 @@ export class SKMQuiz extends LitElement {
     this.dataTitle = '';
     this.loading = false;
     this.quizData = null;
+    this.drawerWidth = window.screen.width;
   }
 
   protected firstUpdated(): void {
     const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
     const alertDialog = this.shadowRoot?.querySelector('.quiz-progress-alert') as HTMLElement;
+
+    /**AdaptDrawerWidth */
+    if (this.drawerWidth <= 768) {
+      dialog.style.setProperty('--size', '90vw');
+    }
 
     dialog?.addEventListener('sl-request-close', (event: any) => {
       if (event.detail.source === 'overlay') {

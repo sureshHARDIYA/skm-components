@@ -13,6 +13,7 @@ export default css`
         margin-top: 10px;
         margin-bottom: 10px;
         padding: 1rem;
+        line-height: 24px;
       }
       .answers {
         padding: 10px;
