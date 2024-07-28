@@ -29,12 +29,12 @@ export default css`
     margin-top: 1rem;
 
     .quiz-title {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin: 0;
     }
 
     .start-quiz {
-      background-color: #4caf50;
+      background-color: #1d3d6f;
       border: none;
       color: white;
       padding: 0 10px;
@@ -42,7 +42,7 @@ export default css`
       height: 35px;
       display: inline-block;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: 5px;
     }
   }
 `;

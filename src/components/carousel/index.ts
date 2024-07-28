@@ -17,6 +17,14 @@ export default class SKMCarousel extends LitElement {
 
     this.querySelectorAll('skm-flip-slide').forEach((slide, index) => {
       slide.setAttribute('selected', index === currentSlide ? 'true' : 'false');
+
+      /**
+       * Make sure the current slide is always showing front by default
+       */
+      if (index === currentSlide) {
+        const currentInner = slide.shadowRoot?.querySelector('.flip-box-inner');
+        currentInner?.classList.add('rotationBack');
+      }
     });
 
     for (let i = 0; i < this.children.length; i++) {
@@ -38,6 +46,7 @@ export default class SKMCarousel extends LitElement {
 
     this.checkActive(this.currentSlide);
   };
+
   firstUpdated() {
     this.checkActive(this.currentSlide);
     this.shadowRoot?.querySelector('.next-slide')?.addEventListener('click', () => {
