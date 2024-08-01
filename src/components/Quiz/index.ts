@@ -31,6 +31,7 @@ export class SKMQuiz extends LitElement {
   @property() loading: boolean;
   @property() quizData: null;
   @property() totalQuestions = 0;
+  @property() isAuthenticated: boolean;
 
   constructor() {
     super();
@@ -40,11 +41,24 @@ export class SKMQuiz extends LitElement {
     this.loading = false;
     this.quizData = null;
     this.drawerWidth = window.screen.width;
+    this.isAuthenticated = false;
   }
 
   protected firstUpdated(): void {
+    const headers = prepareHeaders();
+    
+    if(headers && 'Authorization' in headers) {
+      this.isAuthenticated = true;
+    }
+
+
     const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
     const alertDialog = this.shadowRoot?.querySelector('.quiz-progress-alert') as HTMLElement;
+    const authErrorDialog = this.shadowRoot?.querySelector('.dialog-auth-error') as HTMLElement;
+
+    authErrorDialog?.addEventListener('sl-request-close', () => {
+      (authErrorDialog as any)?.hide();
+    });
 
     /**AdaptDrawerWidth */
     if (this.drawerWidth <= 768) {
@@ -95,6 +109,23 @@ export class SKMQuiz extends LitElement {
   }
 
   render() {
+    if (!this.isAuthenticated) {
+      return html`<div class="skm-quiz-outer-wrapper">
+        <div class="skm-quiz-container">
+          <p class="quiz-title">${this.dataTitle}</p>
+          <button class="start-quiz" @click="${this._handleNotAuth}">Start</button>
+        </div>
+        <sl-drawer
+          label="${this.dataTitle}"
+          class="dialog-width dialog-auth-error"
+          style="--size: 50vw;">
+          <p>
+            You need to be logged in to take the quiz.
+          </p>
+        </sl-drawer>
+      </div>`;
+    }
+
     return html`<div class="skm-quiz-outer-wrapper">
       <div class="skm-quiz-container">
         <p class="quiz-title">${this.dataTitle}</p>
@@ -141,6 +172,13 @@ export class SKMQuiz extends LitElement {
     await this.fetchData();
 
     await this.createSession();
+  }
+
+  async _handleNotAuth() {
+    const dialog = this.shadowRoot?.querySelector('.dialog-auth-error') as HTMLElement;
+    if (dialog) {
+      (dialog as any).show();
+    }
   }
 
   async fetchData() {

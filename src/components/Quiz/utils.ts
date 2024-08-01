@@ -1,4 +1,3 @@
-import { password, username } from './constants';
 
 export function isValidJSON(jsonString: string) {
   try {
@@ -37,6 +36,7 @@ function deepParseJson(jsonString: string) {
 
 export const prepareHeaders = () => {
   const rawPersistedData = localStorage.getItem('admin');
+
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
 
@@ -48,6 +48,5 @@ export const prepareHeaders = () => {
     return headers;
   }
 
-  headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
   return headers;
 };
