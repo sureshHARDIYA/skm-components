@@ -51,12 +51,16 @@ export class SKMQuiz extends LitElement {
       this.isAuthenticated = true;
     }
 
+
     const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
     const alertDialog = this.shadowRoot?.querySelector('.quiz-progress-alert') as HTMLElement;
     const authErrorDialog = this.shadowRoot?.querySelector('.dialog-auth-error') as HTMLElement;
 
-    authErrorDialog?.addEventListener('sl-request-close', () => {
-      (authErrorDialog as any)?.hide();
+    authErrorDialog?.addEventListener('sl-request-close', (event: any) => {
+      if (event.detail.source === 'close-button') {
+        event.preventDefault();
+        (authErrorDialog as any)?.show();
+      }
     });
 
     /**AdaptDrawerWidth */
