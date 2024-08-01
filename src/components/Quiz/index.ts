@@ -46,11 +46,10 @@ export class SKMQuiz extends LitElement {
 
   protected firstUpdated(): void {
     const headers = prepareHeaders();
-    
-    if(headers && 'Authorization' in headers) {
+
+    if (headers.get('Authorization')) {
       this.isAuthenticated = true;
     }
-
 
     const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
     const alertDialog = this.shadowRoot?.querySelector('.quiz-progress-alert') as HTMLElement;
