@@ -51,29 +51,19 @@ export class SKMQuiz extends LitElement {
       this.isAuthenticated = true;
     }
 
-
     const dialog = this.shadowRoot?.querySelector('.dialog-width') as HTMLElement;
     const alertDialog = this.shadowRoot?.querySelector('.quiz-progress-alert') as HTMLElement;
-    const authErrorDialog = this.shadowRoot?.querySelector('.dialog-auth-error') as HTMLElement;
-
-    authErrorDialog?.addEventListener('sl-request-close', (event: any) => {
-      if (event.detail.source === 'close-button') {
-        event.preventDefault();
-        (authErrorDialog as any)?.show();
-      }
-    });
-
     /**AdaptDrawerWidth */
     if (this.drawerWidth <= 768) {
       dialog.style.setProperty('--size', '90vw');
     }
 
     dialog?.addEventListener('sl-request-close', (event: any) => {
-      if (event.detail.source === 'overlay') {
+      if (event.detail.source === 'overlay' && this.isAuthenticated) {
         event.preventDefault();
       }
 
-      if (event.detail.source === 'close-button') {
+      if (event.detail.source === 'close-button' && this.isAuthenticated) {
         event.preventDefault();
         (alertDialog as any)?.show();
       }
@@ -112,23 +102,6 @@ export class SKMQuiz extends LitElement {
   }
 
   render() {
-    if (!this.isAuthenticated) {
-      return html`<div class="skm-quiz-outer-wrapper">
-        <div class="skm-quiz-container">
-          <p class="quiz-title">${this.dataTitle}</p>
-          <button class="start-quiz" @click="${this._handleNotAuth}">Start</button>
-        </div>
-        <sl-drawer
-          label="${this.dataTitle}"
-          class="dialog-width dialog-auth-error"
-          style="--size: 50vw;">
-          <p>
-            You need to be logged in to take the quiz.
-          </p>
-        </sl-drawer>
-      </div>`;
-    }
-
     return html`<div class="skm-quiz-outer-wrapper">
       <div class="skm-quiz-container">
         <p class="quiz-title">${this.dataTitle}</p>
@@ -160,10 +133,16 @@ export class SKMQuiz extends LitElement {
         <sl-skeleton effect="pulse"></sl-skeleton>
       </div>`;
     }
-    if (this.quizData) {
+    if (this.quizData && this.isAuthenticated) {
       yield html`<quiz-questions
         .questions=${this.quizData}
         .totalQuestions=${this.totalQuestions}></quiz-questions>`;
+    }
+
+    if (!this.isAuthenticated) {
+      yield html`<div label="Authentication Error" class="dialog-auth-error">
+        You need to be authenticated to start the quiz.
+      </div>`;
     }
   }
 
@@ -172,15 +151,10 @@ export class SKMQuiz extends LitElement {
     if (drawer) {
       (drawer as any).show();
     }
-    await this.fetchData();
 
-    await this.createSession();
-  }
-
-  async _handleNotAuth() {
-    const dialog = this.shadowRoot?.querySelector('.dialog-auth-error') as HTMLElement;
-    if (dialog) {
-      (dialog as any).show();
+    if (this.isAuthenticated) {
+      await this.fetchData();
+      await this.createSession();
     }
   }
 
