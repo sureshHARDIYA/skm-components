@@ -14,10 +14,12 @@ export default css`
         margin-bottom: 10px;
         padding: 1rem;
         line-height: 24px;
+        color: #000;
       }
       .answers {
         padding: 10px;
         background: #f6f6f6;
+        color: #000;
 
         sl-checkbox {
           display: flex;
