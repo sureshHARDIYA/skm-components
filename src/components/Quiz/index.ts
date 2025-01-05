@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { asyncReplace } from 'lit/directives/async-replace.js';
 
+import '@shoelace-style/shoelace/dist/themes/dark.css';
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
