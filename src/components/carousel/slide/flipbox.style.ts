@@ -36,6 +36,7 @@ export default css`
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
+    backface-visibility: hidden;
   }
 
   .rotation {
