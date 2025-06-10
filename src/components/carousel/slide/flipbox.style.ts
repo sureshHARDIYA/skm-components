@@ -16,6 +16,9 @@ export default css`
     height: 300px;
     perspective: 1000px;
     animation: fadeIn 1s ease-out;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .flip-box-inner {
@@ -23,9 +26,10 @@ export default css`
     width: 100%;
     height: 100%;
     text-align: left;
-    transition: transform 0.8s;
+    transition: transform 0.8s ease;
     transform-style: preserve-3d;
-    backface-visibility: hidden;
+    will-change: transform;
+    backface-visibility: visible !important;
   }
 
   .rotation {
@@ -38,31 +42,42 @@ export default css`
 
   .flip-box-front,
   .flip-box-back {
-    color: #000;
     position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    backface-visibility: hidden;
+    background-color: #f5f6f7;
     overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .flip-box-front {
+    z-index: 2;
   }
 
   .flip-box-back {
     transform: rotateX(180deg);
-    text-align: left;
-    background-color: #919eab14;
-    font-size: 16px;
+    z-index: 1;
   }
 
   .slide-content {
+    flex: 1 1 auto;
     overflow-y: auto;
     padding: 24px;
-    max-height: 100%;
+    margin-bottom: 24px;
     box-sizing: border-box;
+    min-height: 0;
+
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+    contain: layout style;
+    will-change: scroll-position;
   }
 
   .slide-content::-webkit-scrollbar {
@@ -71,10 +86,15 @@ export default css`
 
   .slide-content::-webkit-scrollbar-thumb {
     background: #ccc;
-    border-radius: 4px;
+    border-radius: 0;
+  }
+
+  .slot-wrapper::slotted(*) {
+    display: block;
   }
 
   .slide-trigger {
+    flex-shrink: 0;
     position: absolute;
     bottom: 7px;
     right: 10px;
