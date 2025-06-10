@@ -10,18 +10,6 @@ export default css`
     }
   }
 
-  *::slotted(div) {
-    display: flex;
-    justify-content: left;
-    height: 100%;
-    width: 90%;
-    line-height: 22px;
-  }
-
-  .fullheight {
-    height: 100%;
-  }
-
   .flip-box {
     width: 100%;
     background-color: transparent;
@@ -38,7 +26,6 @@ export default css`
     transition: transform 0.8s;
     transform-style: preserve-3d;
     backface-visibility: hidden;
-    padding: 24px;
   }
 
   .rotation {
@@ -54,60 +41,62 @@ export default css`
     color: #000;
     position: absolute;
     width: 100%;
-    display: flex;
     height: 100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     top: 0;
     left: 0;
+    display: flex;
     flex-direction: column;
-    justify-content: left;
-    padding: 24px;
-
-    .slide-trigger {
-      position: absolute;
-      bottom: 7px;
-      border: none;
-      float: right;
-      right: 10px;
-      padding: 1rem;
-      cursor: pointer;
-      background: transparent;
-
-      &:hover {
-        color: green;
-      }
-    }
-  }
-
-  .flip-box-front {
-    // color: #000;
-    // background-color: #eaecee;
-    // color: black;
-    // display: flex;
-    // justify-content: left;
-    // width: 100%;
-    // padding: 24px;
-    // flex-direction: column;
-    // align-items: left;
+    overflow: hidden;
   }
 
   .flip-box-back {
     transform: rotateX(180deg);
     text-align: left;
-    background-color: #f5f6f7;
+    background-color: #919eab14;
     font-size: 16px;
+  }
+
+  .slide-content {
+    overflow-y: auto;
+    padding: 24px;
+    max-height: 100%;
+    box-sizing: border-box;
+  }
+
+  .slide-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .slide-content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  .slide-trigger {
+    position: absolute;
+    bottom: 7px;
+    right: 10px;
+    padding: 1rem;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    color: #0b3d25;
+  }
+
+  .slide-trigger:hover {
+    color: green;
   }
 
   .slide-header {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 22px;
-    color: #022410;
-    padding: 22px 0;
-    display: flex;
+    padding: 24px 0;
     width: 100%;
   }
 `;
