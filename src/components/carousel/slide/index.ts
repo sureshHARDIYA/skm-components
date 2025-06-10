@@ -44,14 +44,18 @@ export default class SKMFlipSlide extends LitElement {
     });
   }
 
+  headerText = 'Insights';
+
   render() {
     return html`<div class="flip-box slide">
       <div class="flip-box-inner">
-        <div class="flip-box-back">
+        <div class="flip-box-back text-black darK:text-white">
+          <header class="slide-header text-black darK:text-white">${this.headerText}</header>
           <slot name="slide-back"></slot>
-          <button class="slide-trigger">Click to flip</button>
+          <button class="slide-trigger text-green-900 darK:text-white">Click to flip</button>
         </div>
-        <div class="flip-box-front">
+        <div class="flip-box-front text-black darK:text-white">
+          <header class="slide-header">${this.headerText}</header>
           <slot name="slide-front"></slot>
           <button class="slide-trigger">Click to flip</button>
         </div>

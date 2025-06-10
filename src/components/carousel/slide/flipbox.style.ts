@@ -12,9 +12,10 @@ export default css`
 
   *::slotted(div) {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
     height: 100%;
+    width: 90%;
+    line-height: 22px;
   }
 
   .fullheight {
@@ -33,10 +34,11 @@ export default css`
     position: relative;
     width: 100%;
     height: 100%;
-    text-align: center;
+    text-align: left;
     transition: transform 0.8s;
     transform-style: preserve-3d;
     backface-visibility: hidden;
+    padding: 24px;
   }
 
   .rotation {
@@ -52,14 +54,15 @@ export default css`
     color: #000;
     position: absolute;
     width: 100%;
-    align-items: center;
     display: flex;
-    justify-content: center;
     height: 100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    padding: 5rem;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    justify-content: left;
+    padding: 24px;
 
     .slide-trigger {
       position: absolute;
@@ -70,22 +73,41 @@ export default css`
       padding: 1rem;
       cursor: pointer;
       background: transparent;
+
+      &:hover {
+        color: green;
+      }
     }
   }
 
   .flip-box-front {
-    color: #000;
-    background-color: #eaecee;
-    color: black;
-    align-items: center;
-    display: flex;
-    justify-content: center;
+    // color: #000;
+    // background-color: #eaecee;
+    // color: black;
+    // display: flex;
+    // justify-content: left;
+    // width: 100%;
+    // padding: 24px;
+    // flex-direction: column;
+    // align-items: left;
   }
 
   .flip-box-back {
     transform: rotateX(180deg);
-    text-align: center;
-    align-item: center;
+    text-align: left;
     background-color: #f5f6f7;
+    font-size: 16px;
+  }
+
+  .slide-header {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #022410;
+    padding: 22px 0;
+    display: flex;
+    width: 100%;
   }
 `;

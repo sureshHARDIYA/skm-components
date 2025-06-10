@@ -19,6 +19,7 @@ export default css`
       &:hover .controls {
         opacity: 1;
       }
+        background-color: #919EAB1F;
   
       .controls {
         opacity: 0;
