@@ -102,11 +102,6 @@ export default css`
     background: transparent;
     border: none;
     font-size: 14px;
-    color: #0b3d25;
-  }
-
-  .slide-trigger:hover {
-    color: green;
   }
 
   .slide-header {
