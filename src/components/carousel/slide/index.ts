@@ -45,10 +45,7 @@ export default class SKMFlipSlide extends LitElement {
               <header class="slide-header">${this.headerText}</header>
               <div class="slot-wrapper"><slot name="slide-front"></slot></div>
             </div>
-            <button
-              class="slide-trigger text-black dark:text-white hover:text-green-900 dark:hover:text-green-900">
-              Click to flip
-            </button>
+            <button class="slide-trigger text-black dark:text-white">Click to flip</button>
           </div>
         </div>
       </div>

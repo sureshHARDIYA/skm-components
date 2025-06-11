@@ -104,6 +104,10 @@ export default css`
     font-size: 14px;
   }
 
+  .slide-trigger:hover {
+    color: green;
+  }
+
   .slide-header {
     font-family: 'Inter';
     font-style: normal;
