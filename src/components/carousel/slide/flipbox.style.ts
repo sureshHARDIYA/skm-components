@@ -50,7 +50,6 @@ export default css`
     display: flex;
     flex-direction: column;
     backface-visibility: hidden;
-    background-color: #f5f6f7;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;

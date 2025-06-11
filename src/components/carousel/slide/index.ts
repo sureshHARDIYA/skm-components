@@ -33,7 +33,7 @@ export default class SKMFlipSlide extends LitElement {
     return html`
       <div class="flip-box slide">
         <div class="flip-box-inner">
-          <div class="flip-box-back">
+          <div class="flip-box-back bg-[#919EAB14] dark:bg-[#919EAB14]">
             <div class="slide-content">
               <header class="slide-header">${this.headerText}</header>
               <div class="slot-wrapper"><slot name="slide-back"></slot></div>
@@ -45,7 +45,10 @@ export default class SKMFlipSlide extends LitElement {
               <header class="slide-header">${this.headerText}</header>
               <div class="slot-wrapper"><slot name="slide-front"></slot></div>
             </div>
-            <button class="slide-trigger">Click to flip</button>
+            <button
+              class="slide-trigger text-black dark:text-white hover:text-green-900 dark:hover:text-green-900">
+              Click to flip
+            </button>
           </div>
         </div>
       </div>
